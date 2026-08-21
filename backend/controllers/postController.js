@@ -46,12 +46,17 @@ const singlePost = async (req,res) => {
 
 const createdPost = async(req,res)=>{
     try{
-        const {title, description, image, category} = req.body;
-        const validation = newPostValidator(title, description, image, category);
+        const {title, description, category} = req.body;
+        if(!req.file){
+            return res.status(400).json({message : "Please upload an image"})
+        }
+        const validation = newPostValidator(title, description, category);
         if(!validation.valid){
             return res.status(400).json({message : validation.message})
         }
-        const newPost = await postService.newPost(title, description, image, category)
+        // handle image upload
+        const imageUrl = await uploadImage(req.file);
+        const newPost = await postService.newPost(title, description, imageUrl, category)
         res.status(201).json({message : "Post created successfully", post : newPost});
     }catch (error) {
         res.status(500).json({message : error.message})
@@ -66,8 +71,9 @@ const updatedPost = async(req,res)=>{
         if(!validation.valid){
             return res.status(400).json({message : validation.message})
         }
-        const {title, description, image, category} = req.body;
-        const updatePost = await postService.updatePost(id,title,description,image,category)
+        const {title, description, category} = req.body;
+        const imageUrl = req.file ? await uploadImage(req.file) : undefined;
+        const updatePost = await postService.updatePost(id,title,description,imageUrl,category)
         if(!updatePost){
             return res.status(404).json({message : "Post not found"})
         }
