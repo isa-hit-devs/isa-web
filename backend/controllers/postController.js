@@ -1,21 +1,23 @@
 const postService = require('../services/postServices');
 const {validateCategory, idValidator, newPostValidator} = require('../validators/postValidators')
-
+const {uploadImage}= require('../services/uploadServices')
 //get all posts
 const getPosts = async (req, res) => {
     try {
-        const {category} = req.query;
+        const { category } = req.query;
+        const page = Math.max(1, parseInt(req.query.page) || 1);
+        const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || 10));
         const validation = validateCategory(category)
-        if(!validation.valid){
-            return res.status(400).json({message : validation.message})
+        if (!validation.valid) {
+            return res.status(400).json({ message: validation.message })
         }
-        const posts = await postService.getPosts(category)
-        if(posts.length === 0){
-            return res.status(200).json({message : "No posts created yet", posts : []})
+        const { posts, total, totalPages } = await postService.getPosts(category, page, limit);
+        if (posts.length === 0) {
+            return res.status(200).json({ message: "No posts found", posts: [], total: 0, page, totalPages: 0 })
         }
-        res.status(200).json({message : "Posts fetched successfully", posts});
-    }catch (error) {
-        res.status(500).json({message : error.message})
+        res.status(200).json({ message: "Posts fetched successfully", posts, total, page, totalPages });
+    } catch (error) {
+        res.status(500).json({ message: error.message })
     }
 }
 

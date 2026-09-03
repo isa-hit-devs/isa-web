@@ -1,8 +1,19 @@
 const post = require('../models/postModel');
 
 // get all posts
- const getPosts = async (category)=>{
-    return await post.find(category ? {category} : {}).select('image title category');
+const getPosts = async (category, page, limit) => {
+    const skip = (page - 1) * limit;
+    const filter = category ? { category } : {};
+    const [posts, total] = await Promise.all([
+        post.find(filter).select('image title category').skip(skip).limit(limit),
+        post.countDocuments(filter)
+    ]);
+    return {
+        posts,
+        total,
+        page,
+        totalPages: Math.ceil(total / limit)
+    };
 }
 
 //get single post
