@@ -12,6 +12,7 @@ const googleLogin = async(req,res)=>{
         return res.status(200).json({message : "login successfull", user : result.user, token : result.token})
         
     }catch(error){
+        console.error("Google login error:", error);
         return res.status(500).json({message : "Internal server error",})
     }
 }

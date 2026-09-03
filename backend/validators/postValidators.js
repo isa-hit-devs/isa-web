@@ -31,8 +31,8 @@ const idValidator = (id)=>{
     }
 }
 
-const newPostValidator = (title,description,image,category)=>{
-    if(!title || !description || !image || !category){
+const newPostValidator = (title,description,category)=>{
+    if(!title || !description || !category){
         return {
             valid : false,
             message : "All fields are required"

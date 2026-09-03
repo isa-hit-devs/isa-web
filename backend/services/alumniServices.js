@@ -1,8 +1,18 @@
 const alumniModel = require('../models/alumniModel');
 
 // get all alumni
-const getAllAlumni = async () => {
-    return await alumniModel.find();
+const getAllAlumni = async (page, limit) => {
+    const skip = (page - 1) * limit;
+    const [alumni, total] = await Promise.all([
+        alumniModel.find().skip(skip).limit(limit),
+        alumniModel.countDocuments()
+    ]);
+    return {
+        alumni,
+        total,
+        page,
+        totalPages: Math.ceil(total / limit)
+    };
 }
 
 // create alumni

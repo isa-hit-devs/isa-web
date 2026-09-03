@@ -1,27 +1,26 @@
 const validBatch = ['2020-2024','2021-2025','2022-2026','2023-2027','2024-2028'];
 
-const validateAlumni = (name, email, batch, photo, linkedin)=>{
-    if(!name || !email || !batch || !photo ){
-        return{
-            valid : false,
-            message : "All fields are required"
-        }
-    }
-    if(!validBatch.includes(batch)){
+const validateAlumni = (name, email, batch, linkedin) => {
+    if (!name || !email || !batch) {
         return {
-            valid : false,
-            message : "Invalid Batch"
+            valid: false,
+            message: "All fields are required"
         }
     }
-    if(typeof name !== 'string' || typeof email !== 'string' || typeof batch !== 'string' || typeof photo !== 'string' || (linkedin && typeof linkedin !== 'string') ){
+    if (!validBatch.includes(batch)) {
         return {
-            valid : false,
-            message : "Invalid data types"
+            valid: false,
+            message: "Invalid Batch"
         }
     }
-
+    if (typeof name !== 'string' || typeof email !== 'string' || typeof batch !== 'string' || (linkedin && typeof linkedin !== 'string')) {
+        return {
+            valid: false,
+            message: "Invalid data types"
+        }
+    }
     return {
-        valid : true
+        valid: true
     }
 }
 

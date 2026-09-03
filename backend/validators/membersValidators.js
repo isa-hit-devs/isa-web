@@ -5,39 +5,34 @@ const validCategory = ["Core-Member", "General-Member"]
 
 
 
-const validateMember = (name,email,photo,position,category)=>{
-    if(!name || !email || !position || !category || !photo){
+const validateMember = (name, email, position, category) => {
+    if (!name || !email || !position || !category) {
         return {
-            valid : false,
-            message : "All fields are required"
+            valid: false,
+            message: "All fields are required"
         }
     }
-    if(!validPosition.includes(position)){
+    if (typeof name != 'string' || typeof email != 'string' || typeof position != 'string' || typeof category != 'string') {
         return {
-            valid : false,
-            message : "Invalid Position"
+            valid: false,
+            message: "Invalid data types"
         }
     }
-
-    if(!validCategory.includes(category)){
+    if (!validPosition.includes(position)) {
         return {
-            valid : false,
-            message : "Invalid Category"
+            valid: false,
+            message: "Invalid Position"
         }
     }
-
-    if(typeof name != 'string' || typeof email != 'string' || typeof position != 'string' || typeof category != 'string' || typeof photo != 'string'){
+    if (!validCategory.includes(category)) {
         return {
-            valid : false,
-            message : "Invalid data types"
+            valid: false,
+            message: "Invalid Category"
         }
     }
-
     return {
-        valid : true,
+        valid: true,
     }
-
-
 }
 
 const idValidator = (id)=>{
